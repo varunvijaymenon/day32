@@ -1,0 +1,57 @@
+
+1)Find all the topics and tasks which are thought in the month of October
+
+db.zendata.find({month:"october"},{months:1,topics:1,tasks:1})
+output-
+{ "_id" : ObjectId("62712abfca99ba32ba64692c"), "topics" : "css", "tasks" : "notsubmitted" }
+{ "_id" : ObjectId("62712ba4ca99ba32ba64692e"), "topics" : "mongodb", "tasks" : "notsubmitted" }
+{ "_id" : ObjectId("62712baeca99ba32ba64692f"), "topics" : "nodejs", "tasks" : "notsubmitted" }
+{ "_id" : ObjectId("62712d73ca99ba32ba646933"), "topics" : "mongodb", "tasks" : "notsubmitted" }
+{ "_id" : ObjectId("62712d81ca99ba32ba646934"), "topics" : "nodejs", "tasks" : "submitted" }
+
+
+2)Find all the company drives which appeared between 15 oct-2020 and 31-oct-2020
+db.zendata.find({company_drive:{$gte:("2020-10-15"),$lt:("2020-10-31")}})
+output-
+{ "_id" : ObjectId("6271287eca99ba32ba64692b"), "month" : "january", "users" : "clark", "codekata" : "75", "attendance" : "present", "topics" : "html", "tasks" : "css", "company_drive" : "2020-10-25", "mentor" : "lavish", "placement" : "yes" }
+{ "_id" : ObjectId("62712abfca99ba32ba64692c"), "month" : "october", "users" : "Dave", "codekata" : "25", "attendance" : "present", "topics" : "css", "tasks" : "notsubmitted", "company_drive" : "2020-10-27", "mentor" : "lavish", "placement" : "no" }
+{ "_id" : ObjectId("62712c97ca99ba32ba646930"), "month" : "march", "users" : "varun", "codekata" : "75", "attendance" : "absent", "topics" : "html", "tasks" : "submitted", "company_drive" : "2020-10-15", "mentor" : "lavish", "placement" : "no" }
+{ "_id" : ObjectId("62712ca3ca99ba32ba646931"), "month" : "december", "users" : "akash", "codekata" : "25", "attendance" : "present", "topics" : "css", "tasks" : "notsubmitted", "company_drive" : "2020-10-17", "mentor" : "lavish", "placement" : "yes" }
+
+3)Find all the company drives and students who are appeared for the placement.
+db.zendata.find({placement:"yes"},{company_drive:1,users:1})
+
+output-
+{ "_id" : ObjectId("6271287eca99ba32ba64692b"), "users" : "clark", "company_drive" : "2020-10-25" }
+{ "_id" : ObjectId("62712aedca99ba32ba64692d"), "users" : "Ava", "company_drive" : "2020-07-22" }
+{ "_id" : ObjectId("62712baeca99ba32ba64692f"), "users" : "balaji", "company_drive" : "2020-01-25" }
+{ "_id" : ObjectId("62712ca3ca99ba32ba646931"), "users" : "akash", "company_drive" : "2020-10-17" }
+{ "_id" : ObjectId("62712d73ca99ba32ba646933"), "users" : "lokesh", "company_drive" : "2020-07-12" }
+{ "_id" : ObjectId("62712d81ca99ba32ba646934"), "users" : "vignesh", "company_drive" : "2020-01-15" }
+
+
+
+4)Find the number of problems solved by the user in codekata
+db.zendata.find({},{codekata:1,users:1})
+
+output-
+{ "_id" : ObjectId("6271287eca99ba32ba64692b"), "users" : "clark", "codekata" : "75" }
+{ "_id" : ObjectId("62712abfca99ba32ba64692c"), "users" : "Dave", "codekata" : "25" }
+{ "_id" : ObjectId("62712aedca99ba32ba64692d"), "users" : "Ava", "codekata" : "35" }
+{ "_id" : ObjectId("62712ba4ca99ba32ba64692e"), "users" : "Akash", "codekata" : "24" }
+{ "_id" : ObjectId("62712baeca99ba32ba64692f"), "users" : "balaji", "codekata" : "89" }
+{ "_id" : ObjectId("62712c97ca99ba32ba646930"), "users" : "varun", "codekata" : "75" }
+{ "_id" : ObjectId("62712ca3ca99ba32ba646931"), "users" : "akash", "codekata" : "25" }
+{ "_id" : ObjectId("62712d6aca99ba32ba646932"), "users" : "avantika", "codekata" : "35" }
+{ "_id" : ObjectId("62712d73ca99ba32ba646933"), "users" : "lokesh", "codekata" : "24" }
+{ "_id" : ObjectId("62712d81ca99ba32ba646934"), "users" : "vignesh", "codekata" : "89" }
+
+5)Find all the mentors with who has the mentee's count more than 15
+db.zendata.aggregate([{"$group":{_id:"$mentor",count:{$sum:1}}},{$match:{count:15}}])
+output-
+Nil
+
+6)Find the number of users who are absent and task is not submitted  between 15 oct-2020 and 31-oct-2020
+db.zendata.aggregate([{"$match":{$and:[{attendance:"absent"},{tasks:"notsubmitted"},{company_drive:{$gte:("2020-10-15"),$lt:("2020-10-31")}}]}}])
+output-
+Nil
